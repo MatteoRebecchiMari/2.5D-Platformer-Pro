@@ -28,7 +28,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     float _jumpHeight = 15.0f;
 
+    // Cache y motion value
     float _yMotion = 0f;
+
+    // Handle double jump activation
+    bool _canDoubleJump = false;
 
     void HandleMovements()
     {
@@ -41,16 +45,28 @@ public class Player : MonoBehaviour
         // HANDLE Y MOTION (Gravity + jumping)
 
         // Handle Jumping (only the the character is not on air --> grounded + Hitting Spacebar in keyboard)
-        if (_controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            _yMotion = _jumpHeight;
+            if (_controller.isGrounded)
+            {
+                _yMotion = transform.position.y + _jumpHeight;
+                _canDoubleJump = true;
+            }
+            // Handle double jump Hitting Spacebar in keyboard
+            else if (_canDoubleJump)
+            {
+                _canDoubleJump = false;
+                _yMotion = transform.position.y + _jumpHeight;
+            }
         }
-
-        // Handle Gravity if the character is NOT GROUNDED
-        if (_controller.isGrounded == false)
+        else
         {
-            // Apply gravity to Y Motion
-            _yMotion -= _gravity;
+            // Handle Gravity if the character is NOT GROUNDED
+            if (_controller.isGrounded == false)
+            {
+                // Apply gravity to Y Motion
+                _yMotion -= _gravity;
+            }
         }
 
         Vector3 motionVector = new Vector3(xMotion, _yMotion, 0);
