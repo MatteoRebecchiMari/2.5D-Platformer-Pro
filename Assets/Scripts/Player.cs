@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
     public void AddCoin()
     {
         _coinsCount++;
-        _uiManager.UpdateCoins(_coinsCount);
+        _uiManager.UpdateCoinDisplay(_coinsCount);
     }
 
 
