@@ -20,7 +20,7 @@ public class MovingPlatform : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         HandleMoving();
     }
@@ -46,6 +46,27 @@ public class MovingPlatform : MonoBehaviour
         // Move to the target position
         transform.position = Vector3.MoveTowards(currentPosition, _target.position, _speed * Time.deltaTime);
 
+    }
+
+
+    // When the player enter in the platform, become a child of the platform: moves with it
+    void OnTriggerEnter(Collider other)
+    {
+        Player hittenPlayer = other.GetComponent<Player>();
+        if(hittenPlayer != null)
+        {
+            other.transform.parent = this.transform;
+        }
+    }
+
+    // When the player exit from the platform, loose the child relation
+    void OnTriggerExit(Collider other)
+    {
+        Player hittenPlayer = other.GetComponent<Player>();
+        if (hittenPlayer != null)
+        {
+            other.transform.parent = null;
+        }
     }
 
 }
