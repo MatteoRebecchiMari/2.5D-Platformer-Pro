@@ -7,10 +7,20 @@ public class Player : MonoBehaviour
     // Character controller
     CharacterController _controller;
 
+    // UI Manager reference
+    UIManager _uiManager;
+
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+
+        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        if(_uiManager == null)
+        {
+            Debug.LogError("UIManager null!");
+        }
+
     }
 
     // Update is called once per frame
@@ -75,5 +85,16 @@ public class Player : MonoBehaviour
         _controller.Move(motionVector * Time.deltaTime);
 
     }
+
+    [SerializeField]
+    int _coinsCount = 0;
+
+    // Increase coin count by one
+    public void AddCoin()
+    {
+        _coinsCount++;
+        _uiManager.UpdateCoins(_coinsCount);
+    }
+
 
 }
