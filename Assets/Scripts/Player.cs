@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,16 +11,21 @@ public class Player : MonoBehaviour
     // UI Manager reference
     UIManager _uiManager;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>();
 
-        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        _uiManager = GameObject.Find("UI_Manager").GetComponent<UIManager>();
         if(_uiManager == null)
         {
-            Debug.LogError("UIManager null!");
+            Debug.LogError("UI_Manager null!");
         }
+
+        // Update lives count at startup
+        _uiManager.UpdateLivesDisplay(_playerLives);
 
     }
 
@@ -96,5 +102,23 @@ public class Player : MonoBehaviour
         _uiManager.UpdateCoinDisplay(_coinsCount);
     }
 
+
+    // Player lives
+    int _playerLives = 3;
+
+    // Damage the player
+    public void Damage()
+    {
+        _playerLives--;
+
+        // Update lives count diplay
+        _uiManager.UpdateLivesDisplay(_playerLives);
+
+        if(_playerLives < 1)
+        {
+            // Dead: restart the scene
+            SceneManager.LoadScene(0);
+        }
+    }
 
 }
